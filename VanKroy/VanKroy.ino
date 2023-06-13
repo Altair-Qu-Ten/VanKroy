@@ -1,20 +1,27 @@
-#include <WiFi.h>
-#include "SPIFFS.h"
+#include <ESP8266WiFi.h>
 
 // WiFi login credentials
-const char* ssid = "wlan1313" ;
-const char* password = "wlan1313pw" ;
+char* ssid = "wlan1313" ;
+char* password = "wlan1313pw" ;
 
 // Initialising Server
 WiFiServer server(80);
+
+// Auxiliar variables to store the current output state
+String output5State = "off";
+String output4State = "off";
+
+// Assign output variables to GPIO pins
+const int output5 = 5;
+const int output4 = 4;
 
 void setup() {
   // put your setup code here, to run once:
   Serial.begin (115200);
   // Network connection
   Serial.print ("Connecting to ");
-  Serial.println ("wlan1313");
-  WiFi.begin("wlan1313", "wlan1313pw");
+  Serial.println (ssid);
+  WiFi.begin(ssid, password);
   while (WiFi.status() != WL_CONNECTED)
     {
     delay (500) ;
