@@ -51,18 +51,19 @@ void loop() {
               client.println(<p> Hallo Mamer </p>);
               // stopping the while loop
               break ;
-              } else {
+              }
+              else {
               currentLine = "";
               }
             }
             else if (c ! = '\r') {
             currentLine += c;
             }
+          }
         }
-      }
-      header = "";
-
-      client.stop();
-      Serial.println("client closed connection" ) ;
-      Serial.println();
+        header = "";
+  
+        client.stop();
+        Serial.println("client closed connection" );
+        Serial.println();
 }
