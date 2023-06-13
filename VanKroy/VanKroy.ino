@@ -1,8 +1,9 @@
-#include <ESP8266WiFi.h>
+#include <WiFi.h>
+#include "SPIFFS.h"
 
 // WiFi login credentials
-const char* ssid = "VanKroy" ;
-const char* password = "VanKroy" ;
+const char* ssid = "wlan1313" ;
+const char* password = "wlan1313pw" ;
 
 // Initialising Server
 WiFiServer server(80);
@@ -12,8 +13,8 @@ void setup() {
   Serial.begin (115200);
   // Network connection
   Serial.print ("Connecting to ");
-  Serial.println ("VanKroy");
-  WiFi.begin("VanKroy", "VanKroy");
+  Serial.println ("wlan1313");
+  WiFi.begin("wlan1313", "wlan1313pw");
   while (WiFi.status() != WL_CONNECTED)
     {
     delay (500) ;
@@ -33,6 +34,7 @@ void loop() {
   if (client) {
     Serial.println ("new client");
       //String with incoming data from client
+      String header;
       String currentLine = "";
       while (client.connected()) {
         // If there is a byte available
@@ -48,7 +50,7 @@ void loop() {
               client.println ("Connection: close");
               client.println();
               //HTML
-              client.println(<p> Hallo Mamer </p>);
+              client.println("<p> Hallo Mamer </p>");
               // stopping the while loop
               break ;
               }
@@ -56,7 +58,7 @@ void loop() {
               currentLine = "";
               }
             }
-            else if (c ! = '\r') {
+            else if (c != '\r') {
             currentLine += c;
             }
           }
@@ -66,4 +68,5 @@ void loop() {
         client.stop();
         Serial.println("client closed connection" );
         Serial.println();
+  }
 }
