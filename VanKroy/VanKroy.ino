@@ -1,6 +1,34 @@
+#include <ArduinoWiFiServer.h>
+#include <BearSSLHelpers.h>
+#include <CertStoreBearSSL.h>
+#include <ESP8266WiFi.h>
+#include <ESP8266WiFiAP.h>
+#include <ESP8266WiFiGeneric.h>
+#include <ESP8266WiFiGratuitous.h>
+#include <ESP8266WiFiMulti.h>
+#include <ESP8266WiFiScan.h>
+#include <ESP8266WiFiSTA.h>
+#include <ESP8266WiFiType.h>
+#include <WiFiClient.h>
+#include <WiFiClientSecure.h>
+#include <WiFiClientSecureBearSSL.h>
+#include <WiFiServer.h>
+#include <WiFiServerSecure.h>
+#include <WiFiServerSecureBearSSL.h>
+#include <WiFiUdp.h>
+#include <ESP8266WebServer-impl.h>
+#include <ESP8266WebServer.h>
+#include <ESP8266WebServerSecure.h>
+#include <Parsing-impl.h>
+#include <Uri.h>
+#include <WiFi.h>
+#include <WiFiClient.h>
+#include <WiFiServer.h>
+#include <WiFiUdp.h>
 #include <ESP8266WiFi.h>
 #include "WiFi.h"
-#include "ESPAsyncWebServer.h"
+#include <SPI.h>
+#include <WiFiUdp.h>
 
 float Temperature;
 float Humidity;
@@ -10,12 +38,7 @@ int Day;
 int Month;
 int Year;
 
-WiFiUDP ntpUDP;
-const long utcOffsetInSeconds = 3600;
-NTPClient timeClient(ntpUDP, "pool.ntp.org", utcOffsetInSeconds);
-
-unsigned long epochTime = timeClient.getEpochTime();
-struct tm *ptm = gmtime ((time_t *)&epochTime);
+const int GMT = 1;
 
 // WiFi login credentials
 char* ssid = "wlan1313" ;
@@ -59,7 +82,10 @@ void loop() {
   WiFiClient client = server.available();
   // if new client connects
   if (client) {
-    Serial.println ("new client");
+           Serial.println();    
+      delay(1000);
+      }    
+     Serial.println ("new client");
       //String with incoming data from client
       String header;
       String currentLine = "";
@@ -79,25 +105,7 @@ void loop() {
               //HTML
               client.println("<p> Hallo Mamer </p>");
               // stopping the while loop
-              break ;
-
-              // control arduino pin
-              if(controlString.indexOf("?GPLED2ON") &gt; -1) //checks for LEDON
-              {
-              digitalWrite(blueLEDPin, HIGH); // set pin high
-              }
-              else{
-              if(controlString.indexOf("?GPLED2OFF") &gt; -1) //checks for LEDOFF
-              {
-              digitalWrite(blueLEDPin, LOW); // set pin low
-              }
-              }
-              //clearing string for next read
-              controlString="";
-              }
-              else {
-              currentLine = "";
-              }
+              break ;              
             }
             else if (c != '\r') {
             currentLine += c;
