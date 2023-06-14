@@ -1,4 +1,21 @@
 #include <ESP8266WiFi.h>
+#include "WiFi.h"
+#include "ESPAsyncWebServer.h"
+
+float Temperature;
+float Humidity;
+String formattedTime;
+String Date;
+int Day;
+int Month;
+int Year;
+
+WiFiUDP ntpUDP;
+const long utcOffsetInSeconds = 3600;
+NTPClient timeClient(ntpUDP, "pool.ntp.org", utcOffsetInSeconds);
+
+unsigned long epochTime = timeClient.getEpochTime();
+struct tm *ptm = gmtime ((time_t *)&epochTime);
 
 // WiFi login credentials
 char* ssid = "wlan1313" ;
@@ -15,8 +32,11 @@ String output4State = "off";
 const int output5 = 5;
 const int output4 = 4;
 
-void setup() {
-  // put your setup code here, to run once:
+String controlString; // Captures out URI querystring
+int blueLEDPin = 2; // pin where our blue LED is connected
+ 
+void setup(){
+pinMode(blueLEDPin, OUTPUT); // change pin 2 to OUTPUT pin
   Serial.begin (115200);
   // Network connection
   Serial.print ("Connecting to ");
@@ -60,6 +80,20 @@ void loop() {
               client.println("<p> Hallo Mamer </p>");
               // stopping the while loop
               break ;
+
+              // control arduino pin
+              if(controlString.indexOf("?GPLED2ON") &gt; -1) //checks for LEDON
+              {
+              digitalWrite(blueLEDPin, HIGH); // set pin high
+              }
+              else{
+              if(controlString.indexOf("?GPLED2OFF") &gt; -1) //checks for LEDOFF
+              {
+              digitalWrite(blueLEDPin, LOW); // set pin low
+              }
+              }
+              //clearing string for next read
+              controlString="";
               }
               else {
               currentLine = "";
