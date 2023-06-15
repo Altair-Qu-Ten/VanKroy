@@ -1,34 +1,6 @@
-#include <ArduinoWiFiServer.h>
-#include <BearSSLHelpers.h>
-#include <CertStoreBearSSL.h>
 #include <ESP8266WiFi.h>
-#include <ESP8266WiFiAP.h>
-#include <ESP8266WiFiGeneric.h>
-#include <ESP8266WiFiGratuitous.h>
-#include <ESP8266WiFiMulti.h>
-#include <ESP8266WiFiScan.h>
-#include <ESP8266WiFiSTA.h>
-#include <ESP8266WiFiType.h>
-#include <WiFiClient.h>
-#include <WiFiClientSecure.h>
-#include <WiFiClientSecureBearSSL.h>
-#include <WiFiServer.h>
-#include <WiFiServerSecure.h>
-#include <WiFiServerSecureBearSSL.h>
-#include <WiFiUdp.h>
-#include <ESP8266WebServer-impl.h>
-#include <ESP8266WebServer.h>
-#include <ESP8266WebServerSecure.h>
-#include <Parsing-impl.h>
-#include <Uri.h>
-#include <WiFi.h>
-#include <WiFiClient.h>
-#include <WiFiServer.h>
-#include <WiFiUdp.h>
-#include <ESP8266WiFi.h>
-#include "WiFi.h"
-#include <SPI.h>
-#include <WiFiUdp.h>
+#include <OneWire.h>
+#include <DallasTemperature.h>
 
 float Temperature;
 float Humidity;
@@ -80,12 +52,6 @@ pinMode(blueLEDPin, OUTPUT); // change pin 2 to OUTPUT pin
 void loop() {
   // put your main code here, to run repeatedly:
   WiFiClient client = server.available();
-  // if new client connects
-  if (client) {
-           Serial.println();    
-      delay(1000);
-      }    
-     Serial.println ("new client");
       //String with incoming data from client
       String header;
       String currentLine = "";
