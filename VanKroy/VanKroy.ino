@@ -1,6 +1,7 @@
 #include <ESP8266WiFi.h>
 #include <OneWire.h>
 #include <DallasTemperature.h>
+#include <FS.h>
 
 float Temperature;
 float Humidity;
@@ -18,6 +19,22 @@ char* password = "wlan1313pw" ;
 
 // Initialising Server
 WiFiServer server(80);
+
+void handleRoot() {
+  String html = readFile("/index.html");
+  String css = readFile("/style.css");
+}
+
+String readFile(const char* path) {
+  File file = SPIFFS.open(path, "r");
+  if (!file) {
+    Serial.println("Failed to open file for reading");
+    return "";
+  }
+  String content = file.readString();
+  file.close();
+  return content;
+}
 
 // Auxiliar variables to store the current output state
 String output5State = "off";
@@ -42,13 +59,17 @@ pinMode(blueLEDPin, OUTPUT); // change pin 2 to OUTPUT pin
     delay (1000);
     Serial.print(".");
     }
-  Serial.println ("WiFi connected");
-  Serial.println ("local IP-Adress :");
-  Serial.println (WiFi.localIP());
-  //Start Server
-  server.begin();
-}
-
+    Serial.println ("WiFi connected");
+    Serial.println ("local IP-Adress :");
+    Serial.println (WiFi.localIP());
+  
+    if (!SPIFFS.begin()) {
+    Serial.println("Failed to mount file system");
+    return;
+    }    
+    server.begin();
+  }
+  
 void loop() {
   // put your main code here, to run repeatedly:
   WiFiClient client = server.available();
