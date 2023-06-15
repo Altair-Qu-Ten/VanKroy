@@ -39,7 +39,7 @@ pinMode(blueLEDPin, OUTPUT); // change pin 2 to OUTPUT pin
   WiFi.begin(ssid, password);
   while (WiFi.status() != WL_CONNECTED)
     {
-    delay (500) ;
+    delay (1000);
     Serial.print(".");
     }
   Serial.println ("WiFi connected");
@@ -64,7 +64,7 @@ void loop() {
           header += c;
           if (c == '\n') {
             if (currentLine.length() == 0) {
-              client.println("HTTP/I.1 200 0K");
+              client.println("HTTP/1.1 200 OK");
               client.println ("Content-type:text/html");
               client.println ("Connection: close");
               client.println();
@@ -78,10 +78,9 @@ void loop() {
             }
           }
         }
-        header = "";
-  
-        client.stop();
-        Serial.println("client closed connection" );
-        Serial.println();
-  }
+        header = "";  
+      }
+      client.stop();
+      Serial.println("client closed connection" );
+      delay (1000);
 }
